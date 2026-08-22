@@ -29,4 +29,12 @@ public class Player {
         render.setColor(Color.PURPLE);
         render.rect(x, y, tamanho, tamanho);
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }
