@@ -49,11 +49,8 @@ public class Lunareth extends ApplicationAdapter {
 
         batch.begin();
         mapa.render(batch);
+        player.render(batch);
         batch.end();
-
-        shapeRenderer.begin(ShapeType.Filled);
-        player.render(shapeRenderer);
-        shapeRenderer.end();
     }
 
     @Override

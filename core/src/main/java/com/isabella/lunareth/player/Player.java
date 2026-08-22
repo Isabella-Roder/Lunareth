@@ -3,8 +3,8 @@ package com.isabella.lunareth.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.isabella.lunareth.mundo.Mapa;
 
 public class Player {
@@ -15,9 +15,12 @@ public class Player {
     private final float tamanho = 32f;
     private final float velocidade = 200f;
 
+    private Texture playerSprite;
+
     public Player(float startX, float startY) {
         this.x = startX;
         this.y = startY;
+        this.playerSprite = new Texture("player/parado/parado.png");
     }
 
     public void update(float delta, Mapa mapa) {
@@ -37,9 +40,14 @@ public class Player {
         }
     }
 
-    public void render(ShapeRenderer render) {
-        render.setColor(Color.PURPLE);
-        render.rect(x, y, tamanho, tamanho);
+    public void render(SpriteBatch batch) {
+        float largura = tamanho;
+        float altura = tamanho * (playerSprite.getHeight() / (float) playerSprite.getWidth());
+        batch.draw(playerSprite, x, y, largura, altura);
+    }
+
+    public void dispose() {
+        playerSprite.dispose();
     }
 
     private boolean colide(Mapa mapa, float px, float py) {
