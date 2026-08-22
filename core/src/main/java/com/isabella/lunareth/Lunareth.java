@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.isabella.lunareth.coletaveis.Item;
 import com.isabella.lunareth.mundo.Mapa;
 import com.isabella.lunareth.player.Player;
 
@@ -21,6 +21,7 @@ public class Lunareth extends ApplicationAdapter {
 
     private Player player;
     private Mapa mapa;
+    private Item item;
 
     @Override
     public void create() {
@@ -32,6 +33,7 @@ public class Lunareth extends ApplicationAdapter {
 
         mapa = new Mapa();
         player = new Player(100, 100);
+        item = new Item(150, 150, "coletaveis/armas/foice_mistica.png");
     }
 
     @Override
@@ -47,9 +49,14 @@ public class Lunareth extends ApplicationAdapter {
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
+        if (item.colideCom(player.getX(), player.getY(), 32f)) {
+            item.coletar();
+        }
+
         batch.begin();
         mapa.render(batch);
         player.render(batch);
+        item.render(batch);
         batch.end();
     }
 
@@ -58,5 +65,6 @@ public class Lunareth extends ApplicationAdapter {
         shapeRenderer.dispose();
         batch.dispose();
         mapa.dispose();
+        item.dispose();
     }
 }
