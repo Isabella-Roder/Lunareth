@@ -16,11 +16,16 @@ public class Mapa {
         texturaPedra = new Texture("chao/pedra.png");
 
         grade = new int[][] {
-            {0, 0, 0, 0, 0},
-            {0, 1, 1, 0, 0},
-            {0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 0}
+            {0,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,1,1,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,1,0,0,0,0},
+            {0,1,0,0,0,0,0,1,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,1,0,0,1,1,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,1,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,1,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0}
         };
     }
 
@@ -38,5 +43,16 @@ public class Mapa {
     public void dispose() {
         texturaGrama.dispose();
         texturaPedra.dispose();
+    }
+
+    public boolean solido(float x, float y) {
+        int coluna = (int) (x / tamanhoTile);
+        int linha = (int) (y / tamanhoTile);
+
+        if (linha < 0 || linha >= grade.length || coluna < 0 || coluna >= grade[0].length) {
+            return true;
+        }
+
+        return grade[linha][coluna] == 1;
     }
 }
