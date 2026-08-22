@@ -12,8 +12,8 @@ public class Mapa {
     private final Texture texturaPedra;
 
     public Mapa() {
-        texturaGrama = new Texture("chao/grama_com_flores.png");
-        texturaPedra = new Texture("chao/pedra.png");
+        texturaGrama = new Texture("chao/grama.png");
+        texturaPedra = new Texture("chao/pedras_grama.png");
 
         grade = new int[][] {
             {0,0,0,0,0,0,0,0,0,0,0,0},
