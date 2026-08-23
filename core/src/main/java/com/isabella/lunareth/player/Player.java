@@ -112,4 +112,9 @@ public class Player {
     public float getY() {
         return y;
     }
+
+    public void setPosicao(float novoX, float novoY) {
+        x = novoX;
+        y = novoY;
+    }
 }

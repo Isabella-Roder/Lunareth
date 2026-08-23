@@ -2,6 +2,7 @@ package com.isabella.lunareth;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +13,8 @@ import com.isabella.lunareth.coletaveis.Itens;
 import com.isabella.lunareth.mundo.Mapa;
 import com.isabella.lunareth.player.Inventario;
 import com.isabella.lunareth.player.Player;
+import com.isabella.lunareth.save.SaveData;
+import com.isabella.lunareth.save.SaveManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Lunareth extends ApplicationAdapter {
@@ -28,7 +31,6 @@ public class Lunareth extends ApplicationAdapter {
     private Player player;
     private Mapa mapa;
     private Item item;
-    private Itens itens;
     private Inventario inventario;
 
     @Override
@@ -48,7 +50,7 @@ public class Lunareth extends ApplicationAdapter {
         player = new Player(100, 100);
         inventario = new Inventario();
 
-        item = new Item(150, 150, itens.FOICE_MISTICA);
+        item = new Item(150, 150, Itens.FOICE_MISTICA);
     }
 
     @Override
@@ -61,6 +63,33 @@ public class Lunareth extends ApplicationAdapter {
 
         float delta = Gdx.graphics.getDeltaTime();
         player.update(delta, mapa);
+
+        if (Gdx.input.isKeyJustPressed(Keys.F5)) {
+            SaveData dados = new SaveData();
+
+            dados.playerX = player.getX();
+            dados.playerY = player.getY();
+
+            for (var tipo : inventario.getItens()) {
+                dados.itensColetados.add(tipo.getNome());
+            }
+
+            SaveManager.salvar(dados);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.F9)) {
+            SaveData dados = SaveManager.carregar();
+
+            if (dados != null) {
+                player.setPosicao(dados.playerX, dados.playerY);
+
+                inventario.getItens().clear();
+                if (dados.itensColetados.contains(item.getTipo().getNome())) {
+                    item.coletar();
+                    inventario.adicionar(item.getTipo());
+                }
+            }
+        }
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
