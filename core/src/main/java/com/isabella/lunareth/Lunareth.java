@@ -17,6 +17,9 @@ import com.isabella.lunareth.coletaveis.catalogo.Item;
 import com.isabella.lunareth.coletaveis.catalogo.Itens;
 import com.isabella.lunareth.coletaveis.comida.Comida;
 import com.isabella.lunareth.mundo.Mapa;
+import com.isabella.lunareth.npc.Npc;
+import com.isabella.lunareth.npc.NpcPatrulha;
+import com.isabella.lunareth.npc.Npcs;
 import com.isabella.lunareth.player.Inventario;
 import com.isabella.lunareth.player.ItemInventario;
 import com.isabella.lunareth.player.Player;
@@ -40,6 +43,9 @@ public class Lunareth extends ApplicationAdapter {
     private List<Item> itensNoMundo;
     private Inventario inventario;
 
+    private List<Npc> npcs;
+    private String dialogoAtivo = null;
+
     @Override
     public void create() {
         camera = new OrthographicCamera();
@@ -56,6 +62,9 @@ public class Lunareth extends ApplicationAdapter {
 
         player = new Player(100, 100);
         inventario = new Inventario();
+
+        npcs = new ArrayList<>();
+        npcs.add(Npcs.ISABELLA);
 
         itensNoMundo = new ArrayList<>();
 
@@ -78,6 +87,10 @@ public class Lunareth extends ApplicationAdapter {
 
         float delta = Gdx.graphics.getDeltaTime();
         player.update(delta, mapa);
+
+        for (Npc npc : npcs) {
+            npc.atualizar(delta);
+        }
 
         if (Gdx.input.isKeyJustPressed(Keys.F5)) {
             SaveData dados = new SaveData();
@@ -122,6 +135,18 @@ public class Lunareth extends ApplicationAdapter {
             }
         }
 
+        if (Gdx.input.isKeyJustPressed(Keys.F)) {
+            dialogoAtivo = null;
+
+            for (Npc npc : npcs) {
+                if (npc.pertoDoPlayer(player.getX(), player.getY(), 32f)) {
+                    dialogoAtivo = npc.getDialogo();
+                    break;
+                }
+            }
+
+        }
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         for (Item itemMundo : itensNoMundo) {
@@ -136,6 +161,10 @@ public class Lunareth extends ApplicationAdapter {
         mapa.render(batch);
         player.render(batch);
         
+        for (Npc npc : npcs) {
+            npc.render(batch);
+        }
+
         for (Item itemMundo : itensNoMundo) {
             itemMundo.render(batch);
         }
@@ -166,6 +195,10 @@ public class Lunareth extends ApplicationAdapter {
             y -= 20;
         }
 
+        if (dialogoAtivo != null) {
+            fonte.draw(batch, dialogoAtivo, 400, 400);
+        }
+
         batch.end();
     }
 
@@ -177,6 +210,10 @@ public class Lunareth extends ApplicationAdapter {
         
         for (Item itemMundo : itensNoMundo) {
             itemMundo.dispose();
+        }
+
+        for (Npc npc : npcs) {
+            npc.dispose();
         }
     }
 
