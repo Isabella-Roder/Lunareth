@@ -70,8 +70,8 @@ public class Lunareth extends ApplicationAdapter {
             dados.playerX = player.getX();
             dados.playerY = player.getY();
 
-            for (var tipo : inventario.getItens()) {
-                dados.itensColetados.add(tipo.getNome());
+            for (var itemInv : inventario.getItens()) {
+                dados.itensColetados.add(itemInv.getTipo().getNome());
             }
 
             SaveManager.salvar(dados);

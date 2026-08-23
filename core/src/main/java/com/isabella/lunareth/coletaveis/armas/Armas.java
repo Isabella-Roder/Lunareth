@@ -6,9 +6,15 @@ import com.isabella.lunareth.coletaveis.catalogo.TipoItem;
 
 
 public class Armas extends TipoItem {
+
+    private float dano;
+    private float durabilidade;
     
     public Armas(String nome, String caminhoTextura, float dado, float durabilidade, RaridadeItem raridade) {
-        super(nome, caminhoTextura, dado, durabilidade, raridade, CategoriaItem.ARMA);
+        super(nome, caminhoTextura, raridade, CategoriaItem.ARMA);
+
+        this.dano = dado;
+        this.durabilidade = durabilidade;
 
         if (dado < 0) {
             throw new IllegalArgumentException("Dano da arma não pode ser menor que zero: " + nome);
@@ -19,7 +25,15 @@ public class Armas extends TipoItem {
         }
     }
 
+    public float getDano() {
+        return dano;
+    }
+
+    public float getDurabilidade() {
+        return durabilidade;
+    }
+
     public float atacar() {
-        return getDano();
+        return dano;
     }
 }

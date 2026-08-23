@@ -7,13 +7,22 @@ import com.isabella.lunareth.coletaveis.catalogo.TipoItem;
 
 public class Inventario {
     
-    private final List<TipoItem> itens = new ArrayList<>();
+    private final List<ItemInventario> itens = new ArrayList<>();
 
     public void adicionar(TipoItem tipo) {
-        itens.add(tipo);
+
+        for (ItemInventario item : itens) {
+
+            if (item.getTipo() == tipo) {
+                item.adicionarUnidade();
+                return;
+            }
+        }
+
+        itens.add(new ItemInventario(tipo, 1));
     }
 
-    public List<TipoItem> getItens() {
+    public List<ItemInventario> getItens() {
         return itens;
     }
 }
