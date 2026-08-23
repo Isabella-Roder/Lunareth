@@ -109,8 +109,25 @@ Responsabilidades atuais das classes principais:
 ## Próximos passos
 
 O escopo da versão inicial (ver `AGENTS.md`) está concluído. Sistemas maiores,
-como combate, NPCs, agricultura, crafting e dungeons, ficam para etapas
-posteriores, implementados um de cada vez.
+como combate, agricultura, crafting e dungeons, ficam para etapas posteriores,
+implementados um de cada vez.
+
+Um NPC básico já existe (`npc/`: `Npc`, `NpcPatrulha`, catálogo `Npcs`), com
+rotina de patrulha simples e uma fala fixa ao interagir (tecla F). O design
+para evoluir esse sistema, ainda não implementado, é:
+
+- **Múltiplas falas por NPC**, não só uma `String` fixa — possivelmente falas
+  diferentes dependendo do contexto (primeira vez falando com ele, depois de
+  uma missão, etc.);
+- **Interação real**, não só mostrar texto — o jogador poder responder/
+  escolher opções de diálogo;
+- **Rotinas que mudam por dia** (ex.: NPC fica em casa domingo, na loja nos
+  outros dias) — depende de existir um sistema de tempo/dia no jogo, que
+  ainda não existe.
+
+Isso é grande o suficiente pra ser pensado como uma sessão própria, com
+arquitetura planejada antes de codar, em vez de crescer aos poucos em cima do
+`NpcPatrulha` atual.
 
 ## Assets
 
