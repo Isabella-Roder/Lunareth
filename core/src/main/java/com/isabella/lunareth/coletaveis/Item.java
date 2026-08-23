@@ -10,13 +10,15 @@ public class Item {
     private final float tamanho = 32f;
     
     private final Texture textura;
+    private final TipoItem tipo;
 
     private boolean coletado = false;
 
-    public Item(float x, float y, String caminhoTextura) {
+    public Item(float x, float y, TipoItem tipo) {
         this.x = x;
         this.y = y;
-        this.textura = new Texture(caminhoTextura);
+        this.tipo = tipo;
+        this.textura = new Texture(tipo.getCaminhoTextura());
     }
 
     public void render(SpriteBatch batch) {
@@ -35,6 +37,10 @@ public class Item {
 
     public boolean isColetado() {
         return coletado;
+    }
+
+    public TipoItem getTipo() {
+        return tipo;
     }
 
     public void dispose() {
