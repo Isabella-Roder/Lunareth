@@ -11,18 +11,17 @@ devem ser originais ou possuir licença compatível.
 
 ## Estado atual
 
-Neste momento, o protótipo possui:
+A versão inicial do jogo está completa. O protótipo possui:
 
 - janela desktop de 1080 x 720;
-- mapa 2D formado por tiles de grama e pedra;
-- personagem controlado pelo teclado;
+- mapa 2D de 40x30 tiles, com grama, pedra, areia e terra;
+- personagem animado (parado e andando, virado pra esquerda/direita);
 - movimento independente da taxa de quadros;
 - câmera acompanhando o personagem;
-- colisão básica com pedras e limites do mapa.
-
-O personagem ainda é representado no jogo por um quadrado provisório. Existem
-sprites em desenvolvimento dentro de `assets/player`, mas eles ainda não foram
-integrados à renderização e à animação.
+- colisão com pedras e limites do mapa;
+- item coletável no mundo (foice mística), com catálogo de tipos de item;
+- inventário básico, exibido como texto na tela;
+- save/load básico (posição do jogador e itens coletados).
 
 ## Controles
 
@@ -32,6 +31,8 @@ integrados à renderização e à animação.
 | `A` | Mover para a esquerda |
 | `S` | Mover para baixo |
 | `D` | Mover para a direita |
+| `F5` | Salvar jogo |
+| `F9` | Carregar jogo |
 
 ## Tecnologias
 
@@ -78,7 +79,14 @@ Lunareth/
 │   └── src/main/java/com/isabella/lunareth/
 │       ├── Lunareth.java
 │       ├── mundo/Mapa.java
-│       └── player/Player.java
+│       ├── player/Player.java
+│       ├── player/Inventario.java
+│       ├── coletaveis/Item.java
+│       ├── coletaveis/TipoItem.java
+│       ├── coletaveis/Itens.java
+│       ├── coletaveis/RaridadeItem.java
+│       ├── save/SaveData.java
+│       └── save/SaveManager.java
 ├── lwjgl3/       # Inicialização e configuração da versão desktop
 ├── gradle/       # Arquivos do Gradle Wrapper
 └── build.gradle  # Configuração geral do projeto
@@ -86,23 +94,23 @@ Lunareth/
 
 Responsabilidades atuais das classes principais:
 
-- `Lunareth`: inicializa os recursos, coordena atualização e renderização e
-  controla a câmera;
+- `Lunareth`: inicializa os recursos, coordena atualização e renderização,
+  controla a câmera e dispara save/load;
 - `Mapa`: armazena a grade de tiles, desenha o cenário e informa quais posições
   são sólidas;
-- `Player`: processa os controles, movimenta o personagem e resolve colisões.
+- `Player`: processa os controles, anima, movimenta o personagem e resolve
+  colisões;
+- `Inventario`: guarda a lista de tipos de item coletados;
+- `Item`/`TipoItem`/`Itens`: representam objetos coletáveis no mundo e o
+  catálogo de tipos de item existentes no jogo;
+- `SaveData`/`SaveManager`: estrutura e persistência dos dados salvos em
+  `assets/save.json`.
 
 ## Próximos passos
 
-O desenvolvimento planejado para a versão inicial inclui, de forma gradual:
-
-1. integrar o sprite e as animações do personagem;
-2. adicionar objetos e pelo menos um recurso coletável;
-3. criar um inventário básico;
-4. implementar save e load básicos.
-
-Sistemas maiores, como combate, NPCs, agricultura, crafting e dungeons, ficam
-para etapas posteriores.
+O escopo da versão inicial (ver `AGENTS.md`) está concluído. Sistemas maiores,
+como combate, NPCs, agricultura, crafting e dungeons, ficam para etapas
+posteriores, implementados um de cada vez.
 
 ## Assets
 

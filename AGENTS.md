@@ -56,18 +56,19 @@ Não reescreva sistemas funcionando sem necessidade.
 
 A primeira versão deve possuir apenas:
 
-- janela funcional;
-- personagem;
-- movimentação WASD;
-- mapa 2D simples;
-- câmera seguindo o jogador;
-- colisões básicas;
-- objetos coletáveis;
-- inventário básico;
-- pelo menos um recurso coletável;
-- save/load básico.
+- [x] janela funcional;
+- [x] personagem;
+- [x] movimentação WASD;
+- [x] mapa 2D simples;
+- [x] câmera seguindo o jogador;
+- [x] colisões básicas;
+- [x] objetos coletáveis;
+- [x] inventário básico;
+- [x] pelo menos um recurso coletável;
+- [x] save/load básico.
 
-Sistemas maiores devem ser implementados posteriormente.
+Escopo da versão inicial concluído. Sistemas maiores (combate, NPCs, agricultura,
+crafting, dungeons) devem ser implementados posteriormente, um de cada vez.
 
 ---
 
@@ -110,7 +111,7 @@ Ao receber uma tarefa:
 - prefira código simples e legível;
 - evite classes gigantes;
 - evite números mágicos;
-- use nomes claros em inglês no código;
+- use nomes claros em português no código (classes, métodos, variáveis, pacotes);
 - mantenha consistência com o estilo existente.
 
 Se encontrar um problema fora do escopo da tarefa, informe-o em vez de alterar silenciosamente.
