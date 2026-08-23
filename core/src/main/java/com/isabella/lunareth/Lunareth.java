@@ -1,5 +1,8 @@
 package com.isabella.lunareth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -30,7 +33,7 @@ public class Lunareth extends ApplicationAdapter {
 
     private Player player;
     private Mapa mapa;
-    private Item item;
+    private List<Item> itensNoMundo;
     private Inventario inventario;
 
     @Override
@@ -50,7 +53,15 @@ public class Lunareth extends ApplicationAdapter {
         player = new Player(100, 100);
         inventario = new Inventario();
 
-        item = new Item(150, 150, Itens.FOICE_MISTICA);
+        itensNoMundo = new ArrayList<>();
+
+        //armas
+        itensNoMundo.add( new Item(150, 150, Itens.FOICE_MISTICA));
+
+        //comidas
+        itensNoMundo.add(new Item(250, 250, Itens.MACA));
+        itensNoMundo.add(new Item(250, 150, Itens.MACA_VERDE));
+        itensNoMundo.add(new Item(300, 250, Itens.MORANGO));
     }
 
     @Override
@@ -84,24 +95,35 @@ public class Lunareth extends ApplicationAdapter {
                 player.setPosicao(dados.playerX, dados.playerY);
 
                 inventario.getItens().clear();
-                if (dados.itensColetados.contains(item.getTipo().getNome())) {
-                    item.coletar();
-                    inventario.adicionar(item.getTipo());
+                
+                for (Item itemMundo : itensNoMundo) {
+
+                    if (dados.itensColetados.contains(itemMundo.getTipo().getNome())) {
+                        itemMundo.coletar();
+                        inventario.adicionar(itemMundo.getTipo());
+                    }
                 }
             }
         }
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        if (!item.isColetado() && item.colideCom(player.getX(), player.getY(), 32f)) {
-            item.coletar();
-            inventario.adicionar(item.getTipo());
+        for (Item itemMundo : itensNoMundo) {
+
+            if (!itemMundo.isColetado() && itemMundo.colideCom(player.getX(), player.getY(), 32f)) {
+                itemMundo.coletar();
+                inventario.adicionar(itemMundo.getTipo());
+            }
         }
 
         batch.begin();
         mapa.render(batch);
         player.render(batch);
-        item.render(batch);
+        
+        for (Item itemMundo : itensNoMundo) {
+            itemMundo.render(batch);
+        }
+
         batch.end();
 
         batch.setProjectionMatrix(cameraUI.combined);
@@ -115,6 +137,9 @@ public class Lunareth extends ApplicationAdapter {
         shapeRenderer.dispose();
         batch.dispose();
         mapa.dispose();
-        item.dispose();
+        
+        for (Item itemMundo : itensNoMundo) {
+            itemMundo.dispose();
+        }
     }
 }
