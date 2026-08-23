@@ -24,4 +24,8 @@ public class ItemInventario {
     public void adicionarUnidade() {
         quantidade++;
     }
+
+    public void removerUnidade() {
+        quantidade--;
+    }
 }

@@ -13,6 +13,8 @@ public class Player {
     private float x;
     private float y;
 
+    private Atributos atributos = new Atributos();
+
     private final float tamanho = 32f;
     private final float velocidade = 200f;
 
@@ -111,6 +113,10 @@ public class Player {
 
     public float getY() {
         return y;
+    }
+
+    public Atributos getAtributos() {
+        return atributos;
     }
 
     public void setPosicao(float novoX, float novoY) {

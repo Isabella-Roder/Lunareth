@@ -6,13 +6,16 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.isabella.lunareth.coletaveis.catalogo.Item;
 import com.isabella.lunareth.coletaveis.catalogo.Itens;
+import com.isabella.lunareth.coletaveis.comida.Comida;
 import com.isabella.lunareth.mundo.Mapa;
 import com.isabella.lunareth.player.Inventario;
 import com.isabella.lunareth.player.ItemInventario;
@@ -107,6 +110,18 @@ public class Lunareth extends ApplicationAdapter {
             }
         }
 
+        if (Gdx.input.isKeyJustPressed(Keys.E)) {
+            
+            for (ItemInventario itemInv : inventario.getItens()) {
+
+                if (itemInv.getTipo() instanceof Comida comida) {
+                    player.getAtributos().aplicarEfeito(comida.comer());
+                    itemInv.removerUnidade();
+                    break;
+                }
+            }
+        }
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         for (Item itemMundo : itensNoMundo) {
@@ -127,11 +142,24 @@ public class Lunareth extends ApplicationAdapter {
 
         batch.end();
 
+        shapeRenderer.setProjectionMatrix(cameraUI.combined);
+        shapeRenderer.begin(ShapeType.Filled);
+
+        float yBarra = 700;
+        desenharBarra(10, yBarra, 150, 12, player.getAtributos().getVida(), 100, Color.RED);
+        yBarra -= 18;
+        desenharBarra(10, yBarra, 150, 12, player.getAtributos().getFome(), 100, Color.ORANGE);
+        yBarra -= 18;
+        desenharBarra(10, yBarra, 150, 12, player.getAtributos().getSede(), 100, Color.BLUE);
+        yBarra -= 18;
+        desenharBarra(10, yBarra, 150, 12, player.getAtributos().getEnergia(), 100, Color.YELLOW);
+
+        shapeRenderer.end();
+
         batch.setProjectionMatrix(cameraUI.combined);
         batch.begin();
         
-        float y = 700;
-
+        float y = 610;
         for (ItemInventario itemInv : inventario.getItens()) {
             fonte.draw(batch, itemInv.getTipo().getNome() + " x" + itemInv.getQuantidade(), 10, y);
             y -= 20;
@@ -149,5 +177,16 @@ public class Lunareth extends ApplicationAdapter {
         for (Item itemMundo : itensNoMundo) {
             itemMundo.dispose();
         }
+    }
+
+    private void desenharBarra(float x, float y, float largura, float altura, float valorAtual, float valorMaximo, Color cor) {
+
+        shapeRenderer.setColor(Color.DARK_GRAY);
+        shapeRenderer.rect(x, y, largura, altura);
+
+        float larguraPreenchida = largura * (valorAtual / valorMaximo);
+        shapeRenderer.setColor(cor);
+        shapeRenderer.rect(x, y, larguraPreenchida, altura);
+
     }
 }
