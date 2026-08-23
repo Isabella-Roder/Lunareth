@@ -1,4 +1,4 @@
-package com.isabella.lunareth.coletaveis;
+package com.isabella.lunareth.coletaveis.catalogo;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

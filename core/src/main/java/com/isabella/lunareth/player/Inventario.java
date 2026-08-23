@@ -3,7 +3,7 @@ package com.isabella.lunareth.player;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.isabella.lunareth.coletaveis.TipoItem;
+import com.isabella.lunareth.coletaveis.catalogo.TipoItem;
 
 public class Inventario {
     

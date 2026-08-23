@@ -1,4 +1,4 @@
-package com.isabella.lunareth.coletaveis;
+package com.isabella.lunareth.coletaveis.catalogo;
 
 public enum RaridadeItem {
     COMUM,
