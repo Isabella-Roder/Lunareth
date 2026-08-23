@@ -161,7 +161,8 @@ public class Lunareth extends ApplicationAdapter {
         
         float y = 610;
         for (ItemInventario itemInv : inventario.getItens()) {
-            fonte.draw(batch, itemInv.getTipo().getNome() + " x" + itemInv.getQuantidade(), 10, y);
+            batch.draw(itemInv.getTipo().getTextura(), 10, y - 16, 16, 16);
+            fonte.draw(batch, itemInv.getTipo().getNome() + " x" + itemInv.getQuantidade(), 30, y);
             y -= 20;
         }
 
