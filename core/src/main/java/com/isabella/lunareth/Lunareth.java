@@ -15,6 +15,7 @@ import com.isabella.lunareth.coletaveis.catalogo.Item;
 import com.isabella.lunareth.coletaveis.catalogo.Itens;
 import com.isabella.lunareth.mundo.Mapa;
 import com.isabella.lunareth.player.Inventario;
+import com.isabella.lunareth.player.ItemInventario;
 import com.isabella.lunareth.player.Player;
 import com.isabella.lunareth.save.SaveData;
 import com.isabella.lunareth.save.SaveManager;
@@ -128,7 +129,14 @@ public class Lunareth extends ApplicationAdapter {
 
         batch.setProjectionMatrix(cameraUI.combined);
         batch.begin();
-        fonte.draw(batch, "Itens: " + inventario.getItens().size(), 10, 700);
+        
+        float y = 700;
+
+        for (ItemInventario itemInv : inventario.getItens()) {
+            fonte.draw(batch, itemInv.getTipo().getNome() + " x" + itemInv.getQuantidade(), 10, y);
+            y -= 20;
+        }
+
         batch.end();
     }
 
