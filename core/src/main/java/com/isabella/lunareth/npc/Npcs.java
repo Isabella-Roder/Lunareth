@@ -1,7 +1,8 @@
 package com.isabella.lunareth.npc;
 
+import com.isabella.lunareth.npc.personagens.Isabella;
+
 public class Npcs {
-    public static final NpcPatrulha ISABELLA = new NpcPatrulha(
-        400, 400, 500, 400, 50, "player/parado/parado.png", "Olá viajante"
-    );
+    
+    public static final Isabella ISABELLA = new Isabella();
 }
