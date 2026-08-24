@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.isabella.lunareth.coletaveis.catalogo.Item;
 import com.isabella.lunareth.coletaveis.comida.Comida;
 import com.isabella.lunareth.mundo.Mundo;
+import com.isabella.lunareth.npc.Falas;
 import com.isabella.lunareth.npc.Npc;
 import com.isabella.lunareth.player.Inventario;
 import com.isabella.lunareth.player.ItemInventario;
@@ -14,7 +15,7 @@ import com.isabella.lunareth.save.SaveManager;
 
 public class ControlesInput {
 
-    private String dialogoAtivo = null;
+    private Falas falaAtual = null;
 
     public void processar(Player player, Inventario inventario, Mundo mundo) {
         if (Gdx.input.isKeyJustPressed(Keys.F5)) {
@@ -31,6 +32,14 @@ public class ControlesInput {
 
         if (Gdx.input.isKeyJustPressed(Keys.F)) {
             falarComNpc(player, mundo);
+        }
+
+        if (falaAtual != null && falaAtual.temEscolha()) {
+            if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
+                falaAtual = falaAtual.getProximaSeSim();
+            } else if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) {
+                falaAtual = falaAtual.getProximaSeNao();
+            }
         }
     }
 
@@ -77,17 +86,17 @@ public class ControlesInput {
     }
 
     private void falarComNpc(Player player, Mundo mundo) {
-        dialogoAtivo = null;
+        falaAtual = null;
 
         for (Npc npc : mundo.getNpcs()) {
             if (npc.pertoDoPlayer(player.getX(), player.getY(), 32f)) {
-                dialogoAtivo = npc.getDialogo();
+                falaAtual = npc.getFalaInicial();
                 break;
             }
         }
     }
 
-    public String getDialogoAtivo() {
-        return dialogoAtivo;
+    public Falas getFalaAtual() {
+        return falaAtual;
     }
 }

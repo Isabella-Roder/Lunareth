@@ -17,7 +17,7 @@ public class NpcPatrulha extends Npc {
         float yFinal,
         float velocidade,
         String caminhoTextura,
-        String dialogo
+        Falas dialogo
     ) {
         super(xInicial, yInicial, caminhoTextura, dialogo);
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.isabella.lunareth.mundo.Mundo;
+import com.isabella.lunareth.npc.Falas;
 import com.isabella.lunareth.player.Inventario;
 import com.isabella.lunareth.player.ItemInventario;
 import com.isabella.lunareth.player.Player;
@@ -24,10 +25,10 @@ public class Hud {
         fonte = new BitmapFont();
     }
 
-    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer, Player player, Inventario inventario, Mundo mundo, String dialogoAtivo) {
+    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer, Player player, Inventario inventario, Mundo mundo, Falas falaAtual) {
         desenharNoite(shapeRenderer, mundo);
         desenharBarrasDeAtributos(shapeRenderer, player);
-        desenharTexto(batch, player, inventario, mundo, dialogoAtivo);
+        desenharTexto(batch, player, inventario, mundo, falaAtual);
     }
 
     private void desenharNoite(ShapeRenderer shapeRenderer, Mundo mundo) {
@@ -65,7 +66,7 @@ public class Hud {
         shapeRenderer.rect(x, y, larguraPreenchida, altura);
     }
 
-    private void desenharTexto(SpriteBatch batch, Player player, Inventario inventario, Mundo mundo, String dialogoAtivo) {
+    private void desenharTexto(SpriteBatch batch, Player player, Inventario inventario, Mundo mundo, Falas falaAtual) {
         batch.setProjectionMatrix(cameraUI.combined);
         batch.begin();
 
@@ -78,8 +79,12 @@ public class Hud {
 
         fonte.draw(batch, "Dia " + mundo.getRelogio().getDiaAtual() + "-" + (int) mundo.getRelogio().getHoraAtual() + "h", 10, 30);
 
-        if (dialogoAtivo != null) {
-            fonte.draw(batch, dialogoAtivo, 400, 400);
+        if (falaAtual != null) {
+            fonte.draw(batch, falaAtual.getTexto(), 400, 400);
+
+            if (falaAtual.temEscolha()) {
+                fonte.draw(batch, "1) Sim   2) Não", 400, 370);
+            }
         }
 
         batch.end();

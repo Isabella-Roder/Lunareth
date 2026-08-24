@@ -12,17 +12,17 @@ public class Npc {
 
     private Texture texture;
 
-    private String dialogo;
+    private Falas falaInicial;
 
-    public Npc(float x, float y, String caminhoTextura, String dialogo) {
+    public Npc(float x, float y, String caminhoTextura, Falas falaInicial) {
         this.x = x;
         this.y = y;
         this.texture = new Texture(caminhoTextura);
-        this.dialogo = dialogo;
+        this.falaInicial = falaInicial;
     }
 
-    public String getDialogo() {
-        return dialogo;
+    public Falas getFalaInicial() {
+        return falaInicial;
     }
 
     public void render(SpriteBatch batch) {
