@@ -16,6 +16,7 @@ import com.isabella.lunareth.save.SaveManager;
 public class ControlesInput {
 
     private Falas falaAtual = null;
+    private boolean inventarioAberto = false;
 
     public void processar(Player player, Inventario inventario, Mundo mundo) {
         if (Gdx.input.isKeyJustPressed(Keys.F5)) {
@@ -40,6 +41,10 @@ public class ControlesInput {
             } else if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) {
                 falaAtual = falaAtual.getProximaSeNao();
             }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.I)) {
+            inventarioAberto = !inventarioAberto;
         }
     }
 
@@ -98,5 +103,9 @@ public class ControlesInput {
 
     public Falas getFalaAtual() {
         return falaAtual;
+    }
+
+    public boolean isInventarioAberto() {
+        return inventarioAberto;
     }
 }

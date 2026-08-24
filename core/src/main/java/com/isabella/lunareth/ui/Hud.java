@@ -25,10 +25,10 @@ public class Hud {
         fonte = new BitmapFont();
     }
 
-    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer, Player player, Inventario inventario, Mundo mundo, Falas falaAtual) {
+    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer, Player player, Inventario inventario, Mundo mundo, Falas falaAtual, boolean inventarioAberto) {
         desenharNoite(shapeRenderer, mundo);
         desenharBarrasDeAtributos(shapeRenderer, player);
-        desenharTexto(batch, player, inventario, mundo, falaAtual);
+        desenharTexto(batch, player, inventario, mundo, falaAtual, inventarioAberto);
     }
 
     private void desenharNoite(ShapeRenderer shapeRenderer, Mundo mundo) {
@@ -66,15 +66,18 @@ public class Hud {
         shapeRenderer.rect(x, y, larguraPreenchida, altura);
     }
 
-    private void desenharTexto(SpriteBatch batch, Player player, Inventario inventario, Mundo mundo, Falas falaAtual) {
+    private void desenharTexto(SpriteBatch batch, Player player, Inventario inventario, Mundo mundo, Falas falaAtual, boolean inventarioAberto) {
         batch.setProjectionMatrix(cameraUI.combined);
         batch.begin();
 
-        float y = 610;
-        for (ItemInventario itemInv : inventario.getItens()) {
-            batch.draw(itemInv.getTipo().getTextura(), 10, y - 16, 16, 16);
-            fonte.draw(batch, itemInv.getTipo().getNome() + " x" + itemInv.getQuantidade(), 30, y);
-            y -= 20;
+        if (inventarioAberto) {
+            
+            float y = 610;
+                for (ItemInventario itemInv : inventario.getItens()) {
+                    batch.draw(itemInv.getTipo().getTextura(), 10, y - 16, 16, 16);
+                    fonte.draw(batch, itemInv.getTipo().getNome() + " x" + itemInv.getQuantidade(), 30, y);
+                    y -= 20;
+                }
         }
 
         fonte.draw(batch, "Dia " + mundo.getRelogio().getDiaAtual() + "-" + (int) mundo.getRelogio().getHoraAtual() + "h", 10, 30);

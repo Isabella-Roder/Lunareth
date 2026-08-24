@@ -63,7 +63,7 @@ public class Lunareth extends ApplicationAdapter {
         player.render(batch);
         batch.end();
 
-        hud.render(batch, shapeRenderer, player, inventario, mundo, controles.getFalaAtual());
+        hud.render(batch, shapeRenderer, player, inventario, mundo, controles.getFalaAtual(), controles.isInventarioAberto());
     }
 
     @Override
