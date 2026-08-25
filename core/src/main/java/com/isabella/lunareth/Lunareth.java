@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.isabella.lunareth.input.ControlesInput;
 import com.isabella.lunareth.mundo.Mundo;
@@ -62,6 +63,10 @@ public class Lunareth extends ApplicationAdapter {
         mundo.render(batch);
         player.render(batch);
         batch.end();
+
+        shapeRenderer.begin(ShapeType.Filled);
+        mundo.renderCriaturas(shapeRenderer);
+        shapeRenderer.end();
 
         hud.render(batch, shapeRenderer, player, inventario, mundo, controles.getFalaAtual(), controles.isInventarioAberto());
     }

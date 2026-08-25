@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.isabella.lunareth.coletaveis.catalogo.Item;
 import com.isabella.lunareth.coletaveis.catalogo.Itens;
+import com.isabella.lunareth.criaturas.Criatura;
 import com.isabella.lunareth.npc.Npc;
 import com.isabella.lunareth.npc.Npcs;
 import com.isabella.lunareth.player.Inventario;
@@ -17,11 +19,15 @@ public class Mundo {
     private final Mapa mapa;
     private final List<Item> itensNoMundo;
     private final List<Npc> npcs;
+    private final List<Criatura> criaturas;
     private final Relogio relogio;
 
     public Mundo() {
         mapa = new Mapa();
         relogio = new Relogio();
+
+        criaturas = new ArrayList<>();
+        criaturas.add(new Criatura(500, 300, 50));
 
         npcs = new ArrayList<>();
         npcs.add(Npcs.ISABELLA);
@@ -64,6 +70,12 @@ public class Mundo {
         }
     }
 
+    public void renderCriaturas(ShapeRenderer renderer) {
+        for (Criatura criatura : criaturas) {
+            criatura.render(renderer);
+        }
+    }
+
     public void dispose() {
         mapa.dispose();
 
@@ -90,5 +102,9 @@ public class Mundo {
 
     public Relogio getRelogio() {
         return relogio;
+    }
+
+    public List<Criatura> getCriaturas() {
+        return criaturas;
     }
 }
