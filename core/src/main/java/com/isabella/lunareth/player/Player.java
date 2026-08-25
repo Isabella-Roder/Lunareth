@@ -17,10 +17,16 @@ public class Player {
 
     private final float tamanho = 32f;
     private final float velocidade = 200f;
+    private float alturaAtaque;
 
     private Animation<TextureRegion> animacaoParado;
     private Animation<TextureRegion> animacaoAndandoDireita;
     private Animation<TextureRegion> animacaoAndandoEsquerda;
+
+    private Animation<TextureRegion> animacaoAtaque;
+    private boolean atacando = false;
+    private float tempoAtaque = 0f;
+
     private float tempoAnimacao = 0f;
     private boolean viradoEsquerda = false;
 
@@ -54,6 +60,13 @@ public class Player {
             "player/andando/andando_esquerda3.png", "player/andando/andando_esquerda4.png",
             "player/andando/andando_esquerda5.png"
         );
+
+        animacaoAtaque = carregarAnimacao(0.08f,
+            "player/ataque/ataque.png", "player/ataque/ataque2.png", "player/ataque/ataque3.png",
+            "player/ataque/ataque4.png", "player/ataque/ataque5.png", "player/ataque/ataque6.png"
+        );
+
+        alturaAtaque = tamanho * (animacaoAtaque.getKeyFrames()[0].getRegionHeight() / (float) animacaoAtaque.getKeyFrames()[0].getRegionWidth());
     }
 
     public void update(float delta, Mapa mapa) {
@@ -67,12 +80,20 @@ public class Player {
         if (Gdx.input.isKeyPressed(Keys.A)) { novoX -= velocidade * delta; viradoEsquerda = true;}
         if (Gdx.input.isKeyPressed(Keys.D)) { novoX += velocidade * delta; viradoEsquerda = false;}
 
+        if (atacando) {
+            tempoAtaque += delta;
+            if (animacaoAtaque.isAnimationFinished(tempoAtaque)) {
+                atacando = false;
+            }
+        }
+
         if (!colide(mapa, novoX, y)) {
             x = novoX;
         }
         if (!colide(mapa, x, novoY)) {
             y = novoY;
         }
+        
     }
 
     public void render(SpriteBatch batch) {
@@ -81,7 +102,9 @@ public class Player {
             || Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.D);
 
         Animation<TextureRegion> animacaoAtual;
-        if (!andando) {
+        if (atacando) {
+            animacaoAtual = animacaoAtaque;
+        } else if (!andando) {
             animacaoAtual = animacaoParado;
         } else if (viradoEsquerda) {
             animacaoAtual = animacaoAndandoEsquerda;
@@ -89,10 +112,12 @@ public class Player {
             animacaoAtual = animacaoAndandoDireita;
         }
         
-        TextureRegion frame = animacaoAtual.getKeyFrame(tempoAnimacao, true);
+        TextureRegion frame = atacando
+            ? animacaoAtaque.getKeyFrame(tempoAtaque, false)
+            : animacaoAtual.getKeyFrame(tempoAnimacao, true);
 
         float largura = tamanho;
-        float altura = tamanho * (frame.getRegionHeight() / (float) frame.getRegionWidth());
+        float altura = atacando ? alturaAtaque : tamanho * (frame.getRegionHeight() / (float) frame.getRegionWidth());
         batch.draw(frame, x, y, largura, altura);
     }
 
@@ -122,5 +147,10 @@ public class Player {
     public void setPosicao(float novoX, float novoY) {
         x = novoX;
         y = novoY;
+    }
+
+    public void iniciarAtaque() {
+        atacando = true;
+        tempoAtaque = 0f;
     }
 }

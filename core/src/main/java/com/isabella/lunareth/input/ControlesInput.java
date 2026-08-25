@@ -110,6 +110,8 @@ public class ControlesInput {
 
     private void atacar(Player player, Inventario inventario, Mundo mundo) {
 
+        player.iniciarAtaque();
+
         for (Criatura criatura : mundo.getCriaturas()) {
 
             if (criatura.pertoDoPlayer(player.getX(), player.getY(), 32f)) {
