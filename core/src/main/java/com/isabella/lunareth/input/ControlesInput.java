@@ -1,9 +1,12 @@
 package com.isabella.lunareth.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.isabella.lunareth.coletaveis.armas.Armas;
 import com.isabella.lunareth.coletaveis.catalogo.Item;
 import com.isabella.lunareth.coletaveis.comida.Comida;
+import com.isabella.lunareth.criaturas.Criatura;
 import com.isabella.lunareth.mundo.Mundo;
 import com.isabella.lunareth.npc.Falas;
 import com.isabella.lunareth.npc.Npc;
@@ -45,6 +48,10 @@ public class ControlesInput {
 
         if (Gdx.input.isKeyJustPressed(Keys.I)) {
             inventarioAberto = !inventarioAberto;
+        }
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            atacar(player, inventario, mundo);
         }
     }
 
@@ -96,6 +103,25 @@ public class ControlesInput {
         for (Npc npc : mundo.getNpcs()) {
             if (npc.pertoDoPlayer(player.getX(), player.getY(), 32f)) {
                 falaAtual = npc.getFalaInicial();
+                break;
+            }
+        }
+    }
+
+    private void atacar(Player player, Inventario inventario, Mundo mundo) {
+
+        for (Criatura criatura : mundo.getCriaturas()) {
+
+            if (criatura.pertoDoPlayer(player.getX(), player.getY(), 32f)) {
+                
+                for (ItemInventario itemInv : inventario.getItens()) {
+
+                    if (itemInv.getTipo() instanceof Armas arma) {
+                        criatura.recebeDano(arma.atacar());
+                        break;
+                    }
+                }
+
                 break;
             }
         }

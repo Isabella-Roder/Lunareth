@@ -56,6 +56,8 @@ public class Mundo {
                 inventario.adicionar(itemMundo.getTipo());
             }
         }
+
+        criaturas.removeIf(Criatura::estaMorta);
     }
 
     public void render(SpriteBatch batch) {
