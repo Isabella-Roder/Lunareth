@@ -1,7 +1,9 @@
 package com.isabella.lunareth.mundo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -16,18 +18,24 @@ import com.isabella.lunareth.tempo.Relogio;
 
 public class Mundo {
 
-    private final Mapa mapa;
+    private final Map<Bioma, Mapa> mapas;
     private final List<Item> itensNoMundo;
     private final List<Npc> npcs;
     private final List<Criatura> criaturas;
     private final Relogio relogio;
 
+    private Bioma biomaAtual;
+
     public Mundo() {
-        mapa = new Mapa();
+        mapas = new HashMap<>();
+        mapas.put(Bioma.BOSQUE, new Mapa(Bioma.BOSQUE));
+        mapas.put(Bioma.PRAIA, new Mapa(Bioma.PRAIA));
+        biomaAtual = Bioma.BOSQUE;
+
         relogio = new Relogio();
 
         criaturas = new ArrayList<>();
-        criaturas.add(new Criatura(500, 300, 50));
+        criaturas.add(criarCriaturaNoBioma(Bioma.BOSQUE, 50));
 
         npcs = new ArrayList<>();
         npcs.add(Npcs.ISABELLA);
@@ -63,11 +71,26 @@ public class Mundo {
             }
         }
 
+        verificarTransicaoDeBioma(player);
+
         criaturas.removeIf(Criatura::estaMorta);
     }
 
+    private void verificarTransicaoDeBioma(Player player) {
+        Mapa mapaDoAtual = getMapaAtual();
+        float margem = mapaDoAtual.getTamanhoTile() * 3;
+
+        if (biomaAtual == Bioma.BOSQUE && player.getX() >= mapaDoAtual.getLarguraEmPixels() - margem) {
+            biomaAtual = Bioma.PRAIA;
+            player.setPosicao(margem, player.getY());
+        } else if (biomaAtual == Bioma.PRAIA && player.getX() <= margem) {
+            biomaAtual = Bioma.BOSQUE;
+            player.setPosicao(mapas.get(Bioma.BOSQUE).getLarguraEmPixels() - margem, player.getY());
+        }
+    }
+
     public void render(SpriteBatch batch) {
-        mapa.render(batch);
+        getMapaAtual().render(batch);
 
         for (Npc npc : npcs) {
             npc.render(batch);
@@ -78,6 +101,18 @@ public class Mundo {
         }
     }
 
+    private Criatura criarCriaturaNoBioma(Bioma bioma, float vida) {
+        Mapa mapaDoBioma = mapas.get(bioma);
+        float x, y;
+
+        do {
+            x = (float) (Math.random() * mapaDoBioma.getLarguraEmPixels());
+            y = (float) (Math.random() * mapaDoBioma.getAlturaEmPixels());
+        } while (mapaDoBioma.biomaEm(x, y) != bioma);
+
+        return new Criatura(x, y, vida, bioma);
+    }
+
     public void renderCriaturas(ShapeRenderer renderer) {
         for (Criatura criatura : criaturas) {
             criatura.render(renderer);
@@ -85,7 +120,9 @@ public class Mundo {
     }
 
     public void dispose() {
-        mapa.dispose();
+        for (Mapa mapaDoBioma : mapas.values()) {
+            mapaDoBioma.dispose();
+        }
 
         for (Item itemMundo : itensNoMundo) {
             itemMundo.dispose();
@@ -96,8 +133,12 @@ public class Mundo {
         }
     }
 
+    public Mapa getMapaAtual() {
+        return mapas.get(biomaAtual);
+    }
+
     public Mapa getMapa() {
-        return mapa;
+        return getMapaAtual();
     }
 
     public List<Item> getItensNoMundo() {

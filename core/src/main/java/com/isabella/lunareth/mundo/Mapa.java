@@ -21,7 +21,10 @@ public class Mapa {
     private final Texture texturaAreia;
     private final Texture texturaTerra;
 
-    public Mapa() {
+    private final Bioma bioma;
+
+    public Mapa(Bioma bioma) {
+        this.bioma = bioma;
         texturaGrama = new Texture("chao/grama.png");
         texturaPedra = new Texture("chao/pedras_grama.png");
         texturaAreia = new Texture("chao/areia.png");
@@ -31,6 +34,13 @@ public class Mapa {
     }
 
     private void construirMapa() {
+
+        if (bioma == Bioma.PRAIA) {
+            criarLimites();
+            preencherRetangulo(1, 1, LARGURA - 2, ALTURA - 2, AREIA);
+            return;
+        }
+
         criarLimites();
         criarCaminhos();
         criarPraia();
@@ -172,10 +182,37 @@ public class Mapa {
         return grade[linha][coluna] == PEDRA;
     }
 
+    public Bioma biomaEm(float x, float y) {
+        int coluna = (int) Math.floor(x / TAMANHO_TILE);
+        int linha = (int) Math.floor(y / TAMANHO_TILE);
+
+        if (linha < 0 || linha >= ALTURA || coluna < 0 || coluna >= LARGURA) {
+            return Bioma.BOSQUE;
+        }
+
+        return switch (grade[linha][coluna]) {
+            case AREIA -> Bioma.PRAIA;
+            case PEDRA -> Bioma.RUINAS_PEDRAS;
+            default -> Bioma.BOSQUE;
+        };
+    }
+
     public void dispose() {
         texturaGrama.dispose();
         texturaPedra.dispose();
         texturaAreia.dispose();
         texturaTerra.dispose();
+    }
+
+    public float getLarguraEmPixels() {
+        return LARGURA * TAMANHO_TILE;
+    }
+
+    public float getAlturaEmPixels() {
+        return ALTURA * TAMANHO_TILE;
+    }
+
+    public float getTamanhoTile() {
+        return TAMANHO_TILE;
     }
 }

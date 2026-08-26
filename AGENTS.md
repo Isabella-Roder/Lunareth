@@ -1,8 +1,9 @@
-# AGENTS.md — Lunareth
+# AGENTS.md — Elaris — Ecos do Vale
 
 ## 1. Sobre o projeto
 
-Lunareth é um jogo 2D desenvolvido em Java com libGDX.
+Elaris — Ecos do Vale (nome interno do projeto/pacote: `lunareth`) é um jogo
+2D desenvolvido em Java com libGDX.
 
 O projeto é experimental e deve crescer de forma incremental. A prioridade atual NÃO é implementar rapidamente uma grande quantidade de funcionalidades, mas construir uma base limpa, compreensível e extensível.
 
@@ -52,23 +53,23 @@ Não reescreva sistemas funcionando sem necessidade.
 
 ---
 
-## 4. Escopo atual — versão inicial
+## 4. Escopo atual
 
-A primeira versão deve possuir apenas:
+A versão inicial (janela, personagem, movimentação, mapa, câmera, colisões,
+coletáveis, inventário, save/load) está concluída. Também já foram
+implementados: combate básico, criaturas, NPC com diálogo em árvore
+(falas com escolha sim/não) e ciclo de dia/noite.
 
-- [x] janela funcional;
-- [x] personagem;
-- [x] movimentação WASD;
-- [x] mapa 2D simples;
-- [x] câmera seguindo o jogador;
-- [x] colisões básicas;
-- [x] objetos coletáveis;
-- [x] inventário básico;
-- [x] pelo menos um recurso coletável;
-- [x] save/load básico.
+Próxima fase — dar identidade de mundo ao jogo, inspirado em Stardew Valley
+(vida, progressão) com um lado de aventura (exploração, combate):
 
-Escopo da versão inicial concluído. Sistemas maiores (combate, NPCs, agricultura,
-crafting, dungeons) devem ser implementados posteriormente, um de cada vez.
+- [ ] biomas: associar criaturas e itens específicos a cada região do mapa
+  (praia, bosque, ruínas, formações de pedra), em vez de tudo espalhado sem
+  relação com o terreno;
+- [ ] rotinas de NPC por dia (depende do `Relogio`, que já existe);
+- [ ] agricultura/crafting (ainda não iniciado).
+
+Cada item dessa lista é uma etapa própria, implementada um de cada vez.
 
 ---
 
