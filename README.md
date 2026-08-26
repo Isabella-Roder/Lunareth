@@ -1,36 +1,50 @@
-# Lunareth
+# Elaris — Ecos do Vale
 
-Lunareth é um jogo 2D experimental desenvolvido em Java com
-[libGDX](https://libgdx.com/). O projeto está no início e evolui de forma
-incremental, priorizando uma base simples, jogável e fácil de expandir.
+Elaris — Ecos do Vale (nome interno do projeto/pacote: `lunareth`) é um jogo
+2D experimental desenvolvido em Java com [libGDX](https://libgdx.com/). O
+projeto está no início e evolui de forma incremental, priorizando uma base
+simples, jogável e fácil de expandir.
 
-O jogo tem como inspirações gerais a exploração, a coleta de recursos, a
-progressão e a vida em um mundo aberto. Essas referências orientam apenas o
-design: o código, os personagens, os mapas e os demais conteúdos de Lunareth
-devem ser originais ou possuir licença compatível.
+O jogo mistura a vida e progressão de Stardew Valley com um lado de aventura
+inspirado em Zelda e Tibia: exploração de diferentes biomas, cada um com suas
+próprias criaturas e itens. Essas referências orientam apenas o design: o
+código, os personagens, os mapas e os demais conteúdos do jogo devem ser
+originais ou possuir licença compatível.
 
 ## Estado atual
 
-A versão inicial do jogo está completa. O protótipo possui:
+O protótipo possui:
 
 - janela desktop de 1080 x 720;
-- mapa 2D de 40x30 tiles, com grama, pedra, areia e terra;
-- personagem animado (parado e andando, virado pra esquerda/direita);
+- mapa 2D de 64x48 tiles, com regiões nomeadas (praia, bosque, ruínas,
+  formações de pedra) e diferentes texturas de terreno;
+- personagem animado (parado, andando, atacando e morrendo);
 - movimento independente da taxa de quadros;
 - câmera acompanhando o personagem;
-- colisão com pedras e limites do mapa;
-- item coletável no mundo (foice mística), com catálogo de tipos de item;
-- inventário básico, exibido como texto na tela;
-- save/load básico (posição do jogador e itens coletados).
+- colisão com o cenário e limites do mapa;
+- itens coletáveis no mundo (armas e comidas), com catálogo de tipos de item;
+- inventário com ícones, que pode ser aberto/fechado;
+- atributos do personagem (vida, fome, sede, energia);
+- save/load básico (posição do jogador e itens coletados);
+- ciclo de dia/noite, com escurecimento gradual da tela;
+- NPC com rotina de patrulha e diálogo com falas encadeadas e escolha
+  sim/não;
+- combate: ataque do jogador (com animação) contra criaturas, que também
+  causam dano de volta.
 
 ## Controles
 
-| Tecla | Ação |
+| Tecla/Botão | Ação |
 | --- | --- |
 | `W` | Mover para cima |
 | `A` | Mover para a esquerda |
 | `S` | Mover para baixo |
 | `D` | Mover para a direita |
+| `F` | Falar com NPC próximo |
+| `1` / `2` | Escolher "sim" / "não" em diálogos |
+| `E` | Comer item |
+| `I` | Abrir/fechar inventário |
+| Clique esquerdo | Atacar criatura próxima |
 | `F5` | Salvar jogo |
 | `F9` | Carregar jogo |
 
@@ -78,15 +92,15 @@ Lunareth/
 ├── core/         # Regras, entidades e renderização compartilhadas
 │   └── src/main/java/com/isabella/lunareth/
 │       ├── Lunareth.java
-│       ├── mundo/Mapa.java
-│       ├── player/Player.java
-│       ├── player/Inventario.java
-│       ├── coletaveis/Item.java
-│       ├── coletaveis/TipoItem.java
-│       ├── coletaveis/Itens.java
-│       ├── coletaveis/RaridadeItem.java
-│       ├── save/SaveData.java
-│       └── save/SaveManager.java
+│       ├── mundo/            # Mapa, mundo do jogo, relógio
+│       ├── input/            # ControlesInput (teclado e mouse)
+│       ├── ui/                # Hud
+│       ├── player/           # Player, Atributos, Inventario
+│       ├── coletaveis/       # Item, TipoItem, catálogo, armas, comida
+│       ├── npc/               # Npc, NpcPatrulha, Falas, personagens
+│       ├── criaturas/        # Criatura
+│       ├── tempo/            # Relogio (dia/noite)
+│       └── save/              # SaveData, SaveManager
 ├── lwjgl3/       # Inicialização e configuração da versão desktop
 ├── gradle/       # Arquivos do Gradle Wrapper
 └── build.gradle  # Configuração geral do projeto
@@ -94,40 +108,45 @@ Lunareth/
 
 Responsabilidades atuais das classes principais:
 
-- `Lunareth`: inicializa os recursos, coordena atualização e renderização,
-  controla a câmera e dispara save/load;
-- `Mapa`: armazena a grade de tiles, desenha o cenário e informa quais posições
-  são sólidas;
-- `Player`: processa os controles, anima, movimenta o personagem e resolve
-  colisões;
-- `Inventario`: guarda a lista de tipos de item coletados;
+- `Lunareth`: inicializa os recursos e coordena `Mundo`, `ControlesInput` e
+  `Hud` a cada frame;
+- `Mundo`: guarda o estado do mundo (mapa, itens, NPCs, criaturas, relógio) e
+  atualiza/renderiza tudo isso;
+- `Mapa`: armazena a grade de tiles, desenha o cenário e informa quais
+  posições são sólidas;
+- `ControlesInput`: processa teclado e mouse (movimento é tratado no
+  `Player`; aqui ficam save/load, comer, falar com NPC, inventário e ataque);
+- `Hud`: desenha a interface (overlay de noite, barras de atributos, lista de
+  itens, diálogo);
+- `Player`: anima, movimenta o personagem e resolve colisões;
+- `Inventario`: guarda a lista de itens coletados;
 - `Item`/`TipoItem`/`Itens`: representam objetos coletáveis no mundo e o
   catálogo de tipos de item existentes no jogo;
+- `Npc`/`NpcPatrulha`/`Npcs`/`Falas`: NPCs com rotina de patrulha e diálogo
+  em árvore (falas com escolha sim/não);
+- `Criatura`: inimigos simples do mundo, com vida e dano de ataque;
 - `SaveData`/`SaveManager`: estrutura e persistência dos dados salvos em
   `assets/save.json`.
 
 ## Próximos passos
 
-O escopo da versão inicial (ver `AGENTS.md`) está concluído. Sistemas maiores,
-como combate, agricultura, crafting e dungeons, ficam para etapas posteriores,
-implementados um de cada vez.
+O escopo da versão inicial (ver `AGENTS.md`) está concluído, assim como
+combate básico, diálogo de NPC com escolhas e ciclo de dia/noite.
 
-Um NPC básico já existe (`npc/`: `Npc`, `NpcPatrulha`, catálogo `Npcs`), com
-rotina de patrulha simples e uma fala fixa ao interagir (tecla F). O design
-para evoluir esse sistema, ainda não implementado, é:
+Os próximos passos giram em torno de dar mais identidade de mundo ao jogo,
+inspirado em Stardew Valley (vida, progressão) com um lado de aventura
+(exploração, combate):
 
-- **Múltiplas falas por NPC**, não só uma `String` fixa — possivelmente falas
-  diferentes dependendo do contexto (primeira vez falando com ele, depois de
-  uma missão, etc.);
-- **Interação real**, não só mostrar texto — o jogador poder responder/
-  escolher opções de diálogo;
-- **Rotinas que mudam por dia** (ex.: NPC fica em casa domingo, na loja nos
-  outros dias) — depende de existir um sistema de tempo/dia no jogo, que
-  ainda não existe.
+- **Biomas**: hoje o `Mapa` já organiza o terreno em regiões nomeadas (praia,
+  bosque, ruínas, formações de pedra). A ideia é associar criaturas e itens
+  específicos a cada uma dessas regiões, em vez de tudo ficar espalhado sem
+  relação com o terreno;
+- **Rotinas de NPC por dia** (ex.: NPC fica em casa num dia, em outro lugar
+  em outro dia) — depende do sistema de tempo/dia já existente (`Relogio`);
+- **Agricultura/crafting**: ainda não iniciado, fica para uma etapa própria.
 
-Isso é grande o suficiente pra ser pensado como uma sessão própria, com
-arquitetura planejada antes de codar, em vez de crescer aos poucos em cima do
-`NpcPatrulha` atual.
+Cada um desses itens deve ser implementado aos poucos, um de cada vez, sem
+tentar montar tudo de uma vez.
 
 ## Assets
 
