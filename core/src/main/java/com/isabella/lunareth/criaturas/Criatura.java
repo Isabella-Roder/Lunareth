@@ -9,6 +9,8 @@ public class Criatura {
     private float y;
     private float tamanho = 32f;
     private float vida = 50;
+    
+    private float dano = 10;
 
     public Criatura(float x, float y, float vida) {
         this.x = x;
@@ -31,5 +33,9 @@ public class Criatura {
 
     public boolean pertoDoPlayer(float px, float py, float pTamanho) {
         return px < x + tamanho && px + pTamanho > x && py < y + tamanho && py + pTamanho > y;
+    }
+
+    public float atacar() {
+        return dano;
     }
 }

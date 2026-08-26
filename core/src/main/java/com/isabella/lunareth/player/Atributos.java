@@ -23,6 +23,10 @@ public class Atributos {
         energia = Math.min(energia + efeito.getEnergia(), energiaMaxima);
     }
 
+    public void receberDano(float dano) {
+        vida -= dano;
+    }
+
     public float getVida() {
         return vida;
     }

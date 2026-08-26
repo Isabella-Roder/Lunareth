@@ -57,6 +57,12 @@ public class Mundo {
             }
         }
 
+        for (Criatura criatura : criaturas) {
+            if (criatura.pertoDoPlayer(player.getX(), player.getY(), 32f)) {
+                player.getAtributos().receberDano(criatura.atacar());
+            }
+        }
+
         criaturas.removeIf(Criatura::estaMorta);
     }
 

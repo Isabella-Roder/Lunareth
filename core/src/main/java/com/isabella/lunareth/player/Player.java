@@ -18,6 +18,7 @@ public class Player {
     private final float tamanho = 32f;
     private final float velocidade = 200f;
     private float alturaAtaque;
+    private float alturaMorte;
 
     private Animation<TextureRegion> animacaoParado;
     private Animation<TextureRegion> animacaoAndandoDireita;
@@ -26,6 +27,10 @@ public class Player {
     private Animation<TextureRegion> animacaoAtaque;
     private boolean atacando = false;
     private float tempoAtaque = 0f;
+
+    private Animation<TextureRegion> animacaoMorrendo;
+    private boolean morreu = false;
+    private float tempoMorte;
 
     private float tempoAnimacao = 0f;
     private boolean viradoEsquerda = false;
@@ -66,11 +71,23 @@ public class Player {
             "player/ataque/ataque4.png", "player/ataque/ataque5.png", "player/ataque/ataque6.png"
         );
 
+        animacaoMorrendo = carregarAnimacao(0.3f, 
+            "player/morrendo/morrendo.png", "player/morrendo/morrendo2.png",
+            "player/morrendo/morrendo3.png", "player/morrendo/morrendo4.png"
+        );
+
         alturaAtaque = tamanho * (animacaoAtaque.getKeyFrames()[0].getRegionHeight() / (float) animacaoAtaque.getKeyFrames()[0].getRegionWidth());
+
+        alturaMorte = tamanho * (animacaoMorrendo.getKeyFrames()[0].getRegionHeight() / (float) animacaoMorrendo.getKeyFrames()[0].getRegionWidth());
     }
 
     public void update(float delta, Mapa mapa) {
         tempoAnimacao += delta;
+
+        if (morreu) {
+            tempoMorte += delta;
+            return;
+        }
 
         float novoX = x;
         float novoY = y;
@@ -85,6 +102,11 @@ public class Player {
             if (animacaoAtaque.isAnimationFinished(tempoAtaque)) {
                 atacando = false;
             }
+        }
+
+        if (atributos.getVida() <= 0 && !morreu) {
+            morreu = true;
+            tempoMorte = 0f;
         }
 
         if (!colide(mapa, novoX, y)) {
@@ -102,7 +124,10 @@ public class Player {
             || Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.D);
 
         Animation<TextureRegion> animacaoAtual;
-        if (atacando) {
+
+        if (morreu) {
+            animacaoAtual = animacaoMorrendo;
+        } else if (atacando) {
             animacaoAtual = animacaoAtaque;
         } else if (!andando) {
             animacaoAtual = animacaoParado;
@@ -112,12 +137,12 @@ public class Player {
             animacaoAtual = animacaoAndandoDireita;
         }
         
-        TextureRegion frame = atacando
-            ? animacaoAtaque.getKeyFrame(tempoAtaque, false)
+        TextureRegion frame = (atacando || morreu)
+            ? animacaoAtual.getKeyFrame(morreu ? tempoMorte : tempoAtaque, false)
             : animacaoAtual.getKeyFrame(tempoAnimacao, true);
 
         float largura = tamanho;
-        float altura = atacando ? alturaAtaque : tamanho * (frame.getRegionHeight() / (float) frame.getRegionWidth());
+        float altura = (atacando || morreu) ? (morreu ? alturaMorte : alturaAtaque) : tamanho * (frame.getRegionHeight() / (float) frame.getRegionWidth());
         batch.draw(frame, x, y, largura, altura);
     }
 
