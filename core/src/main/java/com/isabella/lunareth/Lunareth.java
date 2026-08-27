@@ -53,7 +53,7 @@ public class Lunareth extends ApplicationAdapter {
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         float delta = Gdx.graphics.getDeltaTime();
-        player.update(delta, mundo.getMapa());
+        player.update(delta, mundo.getMapa(), mundo.getArvores());
         mundo.atualizar(delta, player, inventario);
         controles.processar(player, inventario, mundo);
 

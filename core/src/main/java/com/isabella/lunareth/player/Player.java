@@ -1,5 +1,7 @@
 package com.isabella.lunareth.player;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.isabella.lunareth.mundo.Mapa;
+import com.isabella.lunareth.mundo.arvores.Arvore;
 
 public class Player {
     
@@ -81,7 +84,7 @@ public class Player {
         alturaMorte = tamanho * (animacaoMorrendo.getKeyFrames()[0].getRegionHeight() / (float) animacaoMorrendo.getKeyFrames()[0].getRegionWidth());
     }
 
-    public void update(float delta, Mapa mapa) {
+    public void update(float delta, Mapa mapa, List<Arvore> arvores) {
         tempoAnimacao += delta;
 
         if (morreu) {
@@ -109,10 +112,10 @@ public class Player {
             tempoMorte = 0f;
         }
 
-        if (!colide(mapa, novoX, y)) {
+        if (!colide(mapa, novoX, y) && !colideComArvores(arvores, novoX, y)) {
             x = novoX;
         }
-        if (!colide(mapa, x, novoY)) {
+        if (!colide(mapa, x, novoY) && !colideComArvores(arvores, x, novoY)) {
             y = novoY;
         }
         
@@ -155,6 +158,16 @@ public class Player {
             || mapa.solido(px + tamanho - 1, py)
             || mapa.solido(px, py + tamanho - 1)
             || mapa.solido(px + tamanho - 1, py + tamanho - 1);
+    }
+
+    private boolean colideComArvores(List<Arvore> arvores, float px, float py) {
+        for (Arvore arvore : arvores) {
+            if (arvore.colideCom(px, py, tamanho)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public float getX() {

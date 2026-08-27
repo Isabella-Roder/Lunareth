@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.isabella.lunareth.coletaveis.catalogo.Item;
 import com.isabella.lunareth.coletaveis.catalogo.Itens;
 import com.isabella.lunareth.criaturas.Criatura;
+import com.isabella.lunareth.mundo.arvores.Arvore;
 import com.isabella.lunareth.npc.Npc;
 import com.isabella.lunareth.npc.Npcs;
 import com.isabella.lunareth.player.Inventario;
@@ -22,6 +23,7 @@ public class Mundo {
     private final List<Item> itensNoMundo;
     private final List<Npc> npcs;
     private final List<Criatura> criaturas;
+    private final List<Arvore> arvores;
     private final Relogio relogio;
 
     private Bioma biomaAtual;
@@ -36,6 +38,9 @@ public class Mundo {
 
         criaturas = new ArrayList<>();
         criaturas.add(criarCriaturaNoBioma(Bioma.BOSQUE, 50));
+
+        arvores = new ArrayList<>();
+        arvores.add(new Arvore(200, 215, "mundo/arvores/arvoreBosque.png", 216));
 
         npcs = new ArrayList<>();
         npcs.add(Npcs.ISABELLA);
@@ -99,6 +104,10 @@ public class Mundo {
         for (Item itemMundo : itensNoMundo) {
             itemMundo.render(batch);
         }
+
+        for (Arvore arvore : arvores) {
+            arvore.render(batch);
+        }
     }
 
     private Criatura criarCriaturaNoBioma(Bioma bioma, float vida) {
@@ -131,6 +140,10 @@ public class Mundo {
         for (Npc npc : npcs) {
             npc.dispose();
         }
+
+        for (Arvore arvore : arvores) {
+            arvore.dispose();
+        }
     }
 
     public Mapa getMapaAtual() {
@@ -155,5 +168,9 @@ public class Mundo {
 
     public List<Criatura> getCriaturas() {
         return criaturas;
+    }
+
+    public List<Arvore> getArvores() {
+        return arvores;
     }
 }
