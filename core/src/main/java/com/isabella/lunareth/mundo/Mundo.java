@@ -40,7 +40,7 @@ public class Mundo {
         criaturas.add(criarCriaturaNoBioma(Bioma.BOSQUE, 50));
 
         arvores = new ArrayList<>();
-        arvores.add(new Arvore(200, 215, "mundo/arvores/arvoreBosque.png", 216));
+        criarArvoresNoBosque(15);
 
         npcs = new ArrayList<>();
         npcs.add(Npcs.ISABELLA);
@@ -79,6 +79,26 @@ public class Mundo {
         verificarTransicaoDeBioma(player);
 
         criaturas.removeIf(Criatura::estaMorta);
+    }
+
+    private void criarArvoresNoBosque(int quantidade) {
+        Mapa mapaBosque = mapas.get(Bioma.BOSQUE);
+        String[] texturas = {
+            "mundo/arvores/arvoreBosque.png",
+            "mundo/arvores/arvoreBosque2.png", 
+            "mundo/arvores/arvoreBosque3.png"
+        };
+
+        for (int i = 0; i < quantidade; i++) {
+            float x, y;
+            do {
+                x = (float) (Math.random() * mapaBosque.getAlturaEmPixels());
+                y = (float) (Math.random() * mapaBosque.getAlturaEmPixels());
+            } while (mapaBosque.solido(x, y) || mapaBosque.biomaEm(x, y) != Bioma.BOSQUE);
+
+            String textura = texturas[(int) (Math.random() * texturas.length)];
+            arvores.add(new Arvore(x, y, textura, 40));
+        }
     }
 
     private void verificarTransicaoDeBioma(Player player) {
